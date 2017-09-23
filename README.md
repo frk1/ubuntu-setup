@@ -1,14 +1,22 @@
 ## How to use
 
 ```sh
-apt-get update -yqq                                                                  \
-&& apt-get install -yqq sed wget                                                     \
-&& wget --no-check-certificate                                                       \
-https://raw.githubusercontent.com/frk1/ubuntu-setup/master/ubuntu-setup.sh           \
-&& sed -ie s/SCRIPT_USERNAME='frk'/SCRIPT_USERNAME='YOUR_USERNAME'/g ubuntu-setup.sh \
-&& chmod +x ubuntu-setup.sh                                                          \
-&& ./ubuntu-setup.sh
+apt-get update -yqq                                                        \
+&& apt-get install -yqq sed wget nano vim                                  \
+&& wget --no-check-certificate                                             \
+https://raw.githubusercontent.com/frk1/ubuntu-setup/master/ubuntu-setup.sh \
+&& chmod +x ubuntu-setup.sh                                                \
 ```
 
-**REMEMBER TO CHANGE `YOUR_USERNAME` !!!**
+Now open `ubuntu-setup.sh` using `nano` or `vim` and change
+* `SCRIPT_USERNAME` to your preferred username
+* `SCRIPT_YOUR_SSH_KEY` to your public ssh key
+
+I highly recommend using a ssh key for security! If you do not add your SSH key password authentication will stay enabled.
+
+Then execute the script and wait - Depending on your server it may take up to 15min to finish the script.
+
+```sh
+./ubuntu-setup.sh
+```
 
