@@ -147,43 +147,59 @@ printf -- "- Configuring user profile..." >&3
 printf -- "/usr/local/bin/zsh" >> /etc/shells
 chsh -s /usr/local/bin/zsh $SCRIPT_USERNAME
 
-su - $SCRIPT_USERNAME -c 'zsh -s' <<EOF
-  cd ~
-  if [ -z "$SCRIPT_YOUR_SSH_KEY" ]; then
-    mkdir -p .ssh
-    touch .ssh/authorized_keys .ssh/known_hosts
-    printf -- "$SCRIPT_YOUR_SSH_KEY" >> .ssh/authorized_keys
-    chmod 700 .ssh
-    chmod 600 .ssh/authorized_keys
-    ssh-keyscan github.com > .ssh/known_hosts
-  fi
+if [[ ! -z "$SCRIPT_YOUR_SSH_KEY" ]]; then
+  cd /home/$SCRIPT_USERNAME
+  mkdir -p .ssh
+  touch .ssh/authorized_keys .ssh/known_hosts
+  printf -- "$SCRIPT_YOUR_SSH_KEY" >> .ssh/authorized_keys
+  chmod 700 .ssh
+  chmod 600 .ssh/authorized_keys
+  ssh-keyscan github.com > .ssh/known_hosts
+fi
 
-  git clone --recursive https://github.com/Eriner/zim.git ~/.zim
-  setopt EXTENDED_GLOB
-  for template_file ( ~/.zim/templates/* ); do
-    user_file="~/.${template_file:t}"
-    touch ${user_file}
-    ( print -rn "$(<${template_file})$(<${user_file})" >! ${user_file} ) 2>/dev/null
-  done
-
-  http --follow http://git.io/n-install | N_PREFIX=~/.n bash -s -- -n -y -q latest
-  http --follow http://sh.rustup.rs | sh -s -- -y --no-modify-path
-  ~/.cargo/bin/rustup target add x86_64-unknown-linux-musl
-  ~/.cargo/bin/rustup toolchain add nightly
-  ~/.cargo/bin/rustup default nightly
-  ~/.cargo/bin/cargo install --git https://github.com/ogham/exa.git
-EOF
-
-cat <<EOF > /home/$SCRIPT_USERNAME/.zshenv
+cat <<'EOF' > /home/$SCRIPT_USERNAME/.zshenv
 export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
 export LANG='en_US.UTF-8'
 
-export N_PREFIX="\$HOME/.n"
-export PATH="\$N_PREFIX/bin:\$HOME/.toast/armed/bin:\$HOME/.cargo/bin:/usr/local/opt/llvm/bin:\$PATH"
+export N_PREFIX="$HOME/.n"
+export PATH="$N_PREFIX/bin:$HOME/.toast/armed/bin:$HOME/.cargo/bin:/usr/local/opt/llvm/bin:$PATH"
 
 typeset -gU cdpath fpath mailpath path
+EOF
+chown -Rh $SCRIPT_USERNAME /home/$SCRIPT_USERNAME/.zshenv
+
+runuser -l $SCRIPT_USERNAME -c 'zsh -s' <<'EOF'
+  cd ~
+
+  git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim
+  setopt EXTENDED_GLOB
+  for template_file ( ${ZDOTDIR:-${HOME}}/.zim/templates/* ); do
+    user_file="${ZDOTDIR:-${HOME}}/.${template_file:t}"
+    touch ${user_file}
+    ( print -rn "$(<${template_file})$(<${user_file})" >! ${user_file} ) 2>/dev/null
+  done
+
+  wget -O /tmp/n-install.sh https://git.io/n-install
+  wget -O /tmp/rust-install.sh https://sh.rustup.rs
+  chmod +x /tmp/{n,rust}-install.sh
+
+  /tmp/n-install.sh -n -y -q latest
+  /tmp/rust-install.sh -y --no-modify-path
+
+  rm /tmp/{n,rust}-install.sh
+
+  rehash
+  npm i -g npm@latest
+  npm i -g coffee-script@latest pm2@latest
+  pm2 install coffeescript
+  pm2 kill
+
+  rustup target add x86_64-unknown-linux-musl
+  rustup toolchain add nightly
+  rustup default nightly
+  cargo install --git https://github.com/ogham/exa.git
 EOF
 
 chown -Rh $SCRIPT_USERNAME:$SCRIPT_USERNAME /home/$SCRIPT_USERNAME
@@ -408,7 +424,7 @@ mkdir -p /var/www/default
 mkdir -p /var/www/letsencrypt
 chown -Rh $SCRIPT_USERNAME:www-data /var/www
 
-cat <<EOF > /etc/nginx/nginx.conf
+cat <<'EOF' > /etc/nginx/nginx.conf
 user www-data;
 
 worker_processes auto;
@@ -485,7 +501,7 @@ http {
         }
 
         location / {
-            return 301 https://\$host\$request_uri;
+            return 301 https://$host$request_uri;
         }
     }
 
@@ -497,7 +513,7 @@ http {
         location / {
             root /var/www/default;
             index index.php index.html index.htm;
-            try_files \$uri \$uri/ =404;
+            try_files $uri $uri/ =404;
         }
     }
 
@@ -506,11 +522,11 @@ http {
 }
 EOF
 
-cat <<EOF > /etc/nginx/conf.d/example.conf.off
+cat <<'EOF' > /etc/nginx/conf.d/example.conf.off
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name "~^auth\d{0,2}\.vitahook\.pw\$";
+    server_name "~^auth\d{0,2}\.vitahook\.pw$";
 
     ssl_certificate /etc/nginx/ssl/test.vitahook.pw-cert.pem;
     ssl_certificate_key /etc/nginx/ssl/test.vitahook.pw-key.pem;
@@ -518,11 +534,11 @@ server {
     location / {
         root /var/www/default;
         index index.php index.html index.htm;
-        try_files \$uri \$uri/ =404;
+        try_files $uri $uri/ =404;
     }
 
-    location ~ \.php\$ {
-        try_files \$uri =404;
+    location ~ \.php$ {
+        try_files $uri =404;
         include /etc/nginx/fastcgi.conf;
         fastcgi_pass unix:/run/php/php7.0-fpm.sock;
     }
@@ -530,10 +546,10 @@ server {
     location / {
         proxy_pass http://localhost:8001;
         proxy_http_version 1.1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
 EOF
