@@ -164,7 +164,7 @@ export PAGER='less'
 export LANG='en_US.UTF-8'
 
 export N_PREFIX="$HOME/.n"
-export PATH="$N_PREFIX/bin:$HOME/.toast/armed/bin:$HOME/.cargo/bin:/usr/local/opt/llvm/bin:$PATH"
+export PATH="$N_PREFIX/bin:$HOME/.toast/armed/bin:$HOME/.cargo/bin:$PATH"
 
 typeset -gU cdpath fpath mailpath path
 EOF
