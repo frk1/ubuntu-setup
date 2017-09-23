@@ -5,7 +5,7 @@ apt-get update -yq                                                         \
 && apt-get install -yq wget nano vim                                       \
 && wget --no-check-certificate                                             \
 https://raw.githubusercontent.com/frk1/ubuntu-setup/master/ubuntu-setup.sh \
-&& chmod +x ubuntu-setup.sh                                                \
+&& chmod +x ubuntu-setup.sh
 ```
 
 Now open `ubuntu-setup.sh` using `nano` or `vim` and change
