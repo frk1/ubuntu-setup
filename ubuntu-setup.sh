@@ -378,6 +378,7 @@ rm -f /etc/nginx/*.default
 
 mkdir -p /var/lib/nginx/body
 mkdir -p /etc/nginx/conf.d
+mkdir -p /var/www
 chown -Rh www-data:www-data /var/lib/nginx/body
 chown -Rh $SCRIPT_USERNAME:www-data /etc/nginx/conf.d
 
