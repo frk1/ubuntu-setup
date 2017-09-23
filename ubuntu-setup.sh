@@ -147,7 +147,7 @@ printf -- "- Configuring user profile..." >&3
 printf -- "/usr/local/bin/zsh" >> /etc/shells
 chsh -s /usr/local/bin/zsh $SCRIPT_USERNAME
 
-su - $SCRIPT_USERNAME -c 'sh -s' <<EOF
+su - $SCRIPT_USERNAME -c 'zsh -s' <<EOF
   cd ~
   if [ -z "$SCRIPT_YOUR_SSH_KEY" ]; then
     mkdir -p .ssh
@@ -158,15 +158,15 @@ su - $SCRIPT_USERNAME -c 'sh -s' <<EOF
     ssh-keyscan github.com > .ssh/known_hosts
   fi
 
-  git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim
+  git clone --recursive https://github.com/Eriner/zim.git ~/.zim
   setopt EXTENDED_GLOB
-  for template_file ( ${ZDOTDIR:-${HOME}}/.zim/templates/* ); do
-    user_file="${ZDOTDIR:-${HOME}}/.${template_file:t}"
+  for template_file ( ~/.zim/templates/* ); do
+    user_file="~/.${template_file:t}"
     touch ${user_file}
     ( print -rn "$(<${template_file})$(<${user_file})" >! ${user_file} ) 2>/dev/null
   done
 
-  http --follow http://git.io/n-install | N_PREFIX=~/.n bash -s -- -y -q latest
+  http --follow http://git.io/n-install | N_PREFIX=~/.n bash -s -- -n -y -q latest
   http --follow http://sh.rustup.rs | sh -s -- -y --no-modify-path
   ~/.cargo/bin/rustup target add x86_64-unknown-linux-musl
   ~/.cargo/bin/rustup toolchain add nightly
@@ -242,7 +242,7 @@ Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.
 EOF
 
 if [ -z "$SCRIPT_YOUR_SSH_KEY" ]; then
-  sed -ie s/PasswordAuthentication no/PasswordAuthentication yes/g /etc/ssh/sshd_config
+  sed -ie "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
 fi
 
 cd /etc/ssh
