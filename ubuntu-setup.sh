@@ -258,7 +258,7 @@ Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.
 EOF
 
 if [ -z "$SCRIPT_YOUR_SSH_KEY" ]; then
-  sed -ie "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+  sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
 fi
 
 cd /etc/ssh
@@ -567,9 +567,9 @@ apt-get -yqq install php7.1          \
                      php7.1-xml      \
                      php7.1-zip
 
-sed -ie "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.1/fpm/php.ini
-sed -ie "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.1/fpm/php.ini
-sed -ie "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.1/fpm/php.ini
+sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.1/fpm/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.1/fpm/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.1/fpm/php.ini
 
 systemctl restart php7.1-fpm
 
