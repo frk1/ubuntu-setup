@@ -356,7 +356,7 @@ make -j $NB_PROC                              \
                 -y                            \
                 --install=yes
 
-cat <<EOF | tee /etc/systemd/system/nginx.service 1> /dev/null
+cat <<EOF > /etc/systemd/system/nginx.service
 [Unit]
 Description=A high performance web server and a reverse proxy server
 After=network.target
@@ -380,12 +380,10 @@ mkdir -p /var/lib/nginx/body
 mkdir -p /etc/nginx/conf.d
 chown -Rh www-data:www-data /var/lib/nginx/body
 chown -Rh $SCRIPT_USERNAME:www-data /etc/nginx/conf.d
-chown -Rh $SCRIPT_USERNAME:www-data /var/www
 
 systemctl daemon-reload
 systemctl enable nginx.service
 systemctl start nginx.service
-systemctl status nginx.service
 
 printf -- "ok\n" >&3
 printf -- "- Configuring nginx..." >&3
@@ -407,7 +405,7 @@ openssl req -new                                                        \
 
 mkdir -p /var/www/default
 mkdir -p /var/www/letsencrypt
-chown -Rh www-data:www-data /var/www
+chown -Rh $SCRIPT_USERNAME:www-data /var/www
 
 cat <<EOF > /etc/nginx/nginx.conf
 user www-data;
