@@ -14,7 +14,7 @@ Now open `ubuntu-setup.sh` using `nano` or `vim` and change
 
 I highly recommend using a ssh key for security! If you do not add your SSH key, password authentication will stay enabled.
 
-Then execute the script and wait - Depending on your server it may take up to 15min to finish the script.
+Then execute the script and wait - Depending on your server it may take up to 30min to finish the script.
 
 ```sh
 ./ubuntu-setup.sh
