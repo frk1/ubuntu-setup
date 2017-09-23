@@ -1,8 +1,8 @@
 ## How to use
 
 ```sh
-apt-get update -yqq                                                        \
-&& apt-get install -yqq sed wget nano vim                                  \
+apt-get update -yq                                                         \
+&& apt-get install -yq wget nano vim                                       \
 && wget --no-check-certificate                                             \
 https://raw.githubusercontent.com/frk1/ubuntu-setup/master/ubuntu-setup.sh \
 && chmod +x ubuntu-setup.sh                                                \
