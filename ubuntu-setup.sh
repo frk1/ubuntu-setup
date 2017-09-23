@@ -25,6 +25,7 @@ export VERSION_ZSH=5.4.2
 export VERSION_FASD=1.0.1
 export VERSION_LIBRESSL=2.6.1
 export VERSION_CMAKE=3.9.3
+export VERSION_JQ=1.5
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
@@ -121,6 +122,7 @@ chmod -R 1777 /tmp
 adduser toast --disabled-login --disabled-password --quiet --system
 wget -q -O- http://toastball.net/toast/toast-1.488 | perl -x - arm toast
 
+toast arm jq/$VERSION_JQ:             https://github.com/stedolan/jq/releases/download/jq-$VERSION_JQ/jq-$VERSION_JQ.tar.gz
 toast arm git/$VERSION_GIT:           https://www.kernel.org/pub/software/scm/git/git-$VERSION_GIT.tar.gz
 toast arm tmux/$VERSION_TMUX:         https://github.com/tmux/tmux/releases/download/$VERSION_TMUX/tmux-$VERSION_TMUX.tar.gz
 toast arm vim/$VERSION_VIM:           https://github.com/vim/vim/tarball/v$VERSION_VIM
