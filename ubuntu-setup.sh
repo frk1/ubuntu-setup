@@ -16,7 +16,7 @@ printf -- "#########################################\n\n"
 ###################################################################################
 
 export SCRIPT_USERNAME='frk'
-export SCRIPT_YOUR_SSH_KEY=''
+export SCRIPT_SSH_KEY=''
 
 export VERSION_GIT=2.14.1
 export VERSION_TMUX=2.5
@@ -147,11 +147,11 @@ printf -- "- Configuring user profile..." >&3
 printf -- "/usr/local/bin/zsh" >> /etc/shells
 chsh -s /usr/local/bin/zsh $SCRIPT_USERNAME
 
-if [[ ! -z "$SCRIPT_YOUR_SSH_KEY" ]]; then
+if [[ ! -z "$SCRIPT_SSH_KEY" ]]; then
   cd /home/$SCRIPT_USERNAME
   mkdir -p .ssh
   touch .ssh/authorized_keys .ssh/known_hosts
-  printf -- "$SCRIPT_YOUR_SSH_KEY" >> .ssh/authorized_keys
+  printf -- "$SCRIPT_SSH_KEY" >> .ssh/authorized_keys
   chmod 700 .ssh
   chmod 600 .ssh/authorized_keys
   ssh-keyscan github.com > .ssh/known_hosts
@@ -257,7 +257,7 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@op
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 EOF
 
-if [ -z "$SCRIPT_YOUR_SSH_KEY" ]; then
+if [ -z "$SCRIPT_SSH_KEY" ]; then
   sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
 fi
 
