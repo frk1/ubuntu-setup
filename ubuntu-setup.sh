@@ -550,7 +550,7 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         include /etc/nginx/fastcgi.conf;
-        fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.1-fpm.sock;
     }
 
     location / {
