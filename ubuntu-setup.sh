@@ -458,7 +458,7 @@ http {
     ssl_dhparam /etc/nginx/ssl/dhparam.pem;
 
     ssl_prefer_server_ciphers on;
-    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
     ssl_ciphers 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS';
 
     resolver 8.8.8.8 8.8.4.4;
@@ -467,14 +467,12 @@ http {
     ssl_certificate /etc/nginx/ssl/nginx.crt;
     ssl_certificate_key /etc/nginx/ssl/nginx.key;
 
-    add_header X-Frame-Options SAMEORIGIN;
-    add_header X-Content-Type-Options nosniff;
-    add_header X-XSS-Protection "1; mode=block";
-#   add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
-
-#   Content-Security-Policy is disabled by default, because it can be tricky to configure.
-#   If you know what you are doing, uncomment this line!
-#   add_header Content-Security-Policy "default-src 'self' data:; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' https://ajax.googleapis.com https://cdnjs.com https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; child-src 'self'; font-src 'self' https://themes.googleusercontent.com https://fonts.gstatic.com";
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy same-origin always;
+#   add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
+#   add_header Content-Security-Policy "default-src 'self' data:; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' https://ajax.googleapis.com https://cdnjs.com https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; child-src 'self'; font-src 'self' https://themes.googleusercontent.com https://fonts.gstatic.com" always;
 
     server {
         listen 80 default_server;
@@ -507,8 +505,8 @@ http {
         }
     }
 
-    include /etc/nginx/mime.types;
-    include /etc/nginx/conf.d/*.conf;
+    include mime.types;
+    include conf.d/*.conf;
 }
 EOF
 
@@ -529,7 +527,7 @@ server {
 
     location ~ \.php$ {
         try_files $uri =404;
-        include /etc/nginx/fastcgi.conf;
+        include fastcgi.conf;
         fastcgi_pass unix:/run/php/php7.1-fpm.sock;
     }
 
