@@ -216,7 +216,7 @@ runuser -l $SCRIPT_USERNAME -c 'zsh -s' <<'EOF'
   rustup target add x86_64-unknown-linux-musl
   rustup toolchain add nightly
   rustup default nightly
-  cargo install --git https://github.com/ogham/exa.git
+  cargo install --force --git https://github.com/ogham/exa.git
 EOF
 
 chown -Rh $SCRIPT_USERNAME /home/$SCRIPT_USERNAME
