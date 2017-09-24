@@ -45,6 +45,13 @@ exec 2>/dev/null
 gpasswd -a $SCRIPT_USERNAME sudo
 printf -- "- Updating system..." >&3
 
+cat <<'EOF' > /etc/apt/apt.conf.d/local
+Dpkg::Options {
+   "--force-confdef";
+   "--force-confold";
+}
+EOF
+
 export DEBIAN_FRONTEND=noninteractive
 apt-get -yqq update
 apt-get -yqq install software-properties-common language-pack-en-base
@@ -557,4 +564,6 @@ sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.1/fp
 systemctl restart php7.1-fpm
 
 printf -- "ok\n" >&3
+rm /etc/apt/apt.conf.d/local
+
 printf -- "=> Done!\n\n" >&3
