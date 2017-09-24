@@ -161,14 +161,14 @@ rm -rf /etc/nginx
 printf -- "ok\n" >&3
 printf -- "- Configuring user profile..." >&3
 
-printf -- "/usr/local/bin/zsh" >> /etc/shells
+printf -- "/usr/local/bin/zsh\n" >> /etc/shells
 chsh -s /usr/local/bin/zsh $SCRIPT_USERNAME
 
 if [[ ! -z "$SCRIPT_SSH_KEY" ]]; then
   cd /home/$SCRIPT_USERNAME
   mkdir -p .ssh
   touch .ssh/authorized_keys .ssh/known_hosts
-  printf -- "$SCRIPT_SSH_KEY" >> .ssh/authorized_keys
+  printf -- "$SCRIPT_SSH_KEY\n" >> .ssh/authorized_keys
   chmod 700 .ssh
   chmod 600 .ssh/authorized_keys
   ssh-keyscan github.com > .ssh/known_hosts
@@ -239,7 +239,7 @@ PermitRootLogin No
 UsePrivilegeSeparation sandbox
 EOF
 
-cat <<EOF > /etc/ssh/ssh_config
+cat <<'EOF' > /etc/ssh/ssh_config
 HashKnownHosts yes
 HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256
 KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
