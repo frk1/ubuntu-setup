@@ -2,7 +2,7 @@
 set -e
 
 github_get_latest_tag() {
-  curl -sSL https://api.github.com/repos/$1/$2/tags                                            \
+  curl -sSL https://api.github.com/repos/$1/$2/tags                                                   \
   | jq 'map(select(.name | test("^(zsh-)?v?[0-9\\.]+$", "ig"))) | map(.name) | sort | reverse | .[0]' \
   | sed 's/[^0-9\.]//g'
 }
