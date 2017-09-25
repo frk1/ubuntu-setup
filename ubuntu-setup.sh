@@ -456,7 +456,7 @@ http {
     ssl_session_tickets off;
 
     ssl_dhparam /etc/nginx/ssl/dhparam.pem;
-    ssl_ecdh_curve secp521r1:secp384r1:prime256v1;
+    ssl_ecdh_curve X25519:P-521:P-384:P-256;
 
     ssl_prefer_server_ciphers on;
     ssl_protocols TLSv1.2 TLSv1.3;
