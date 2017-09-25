@@ -400,7 +400,7 @@ curl https://get.acme.sh | sh
 mkdir -p /etc/nginx/ssl
 rm -f /etc/nginx/conf.d/default.conf
 
-openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+openssl dhparam -out /etc/nginx/ssl/dhparam.pem 4096
 openssl req -new                                                        \
             -newkey rsa:4096                                            \
             -days 3650                                                  \
