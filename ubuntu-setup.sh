@@ -400,15 +400,25 @@ curl https://get.acme.sh | sh
 mkdir -p /etc/nginx/ssl
 rm -f /etc/nginx/conf.d/default.conf
 
-openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
-openssl req -new                                                        \
+/usr/bin/openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+/usr/bin/openssl req -new                                               \
             -newkey rsa:4096                                            \
             -days 3650                                                  \
             -nodes                                                      \
             -x509                                                       \
             -subj "/C=NL/ST=Amsterdam/L=Amsterdam/O=Dis/CN=example.org" \
-            -keyout /etc/nginx/ssl/nginx.key                            \
-            -out /etc/nginx/ssl/nginx.crt
+            -keyout /etc/nginx/ssl/nginx-rsa.key                        \
+            -out /etc/nginx/ssl/nginx-rsa.crt
+
+/usr/bin/openssl req -new                                               \
+            -newkey ec                                                  \
+            -pkeyopt ec_paramgen_curve:P-384                            \
+            -days 3650                                                  \
+            -nodes                                                      \
+            -x509                                                       \
+            -subj "/C=NL/ST=Amsterdam/L=Amsterdam/O=Dis/CN=example.org" \
+            -keyout /etc/nginx/ssl/nginx-ecc.key                        \
+            -out /etc/nginx/ssl/nginx-ecc.crt
 
 mkdir -p /var/www/default
 mkdir -p /var/www/letsencrypt
@@ -465,8 +475,10 @@ http {
     resolver 8.8.8.8 8.8.4.4;
     ssl_stapling on;
     ssl_stapling_verify on;
-    ssl_certificate /etc/nginx/ssl/nginx.crt;
-    ssl_certificate_key /etc/nginx/ssl/nginx.key;
+    ssl_certificate /etc/nginx/ssl/nginx-ecc.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx-ecc.key;
+    ssl_certificate /etc/nginx/ssl/nginx-rsa.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx-rsa.key;
 
     add_header X-Frame-Options SAMEORIGIN always;
     add_header X-Content-Type-Options nosniff always;
