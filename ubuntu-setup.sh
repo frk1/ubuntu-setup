@@ -18,9 +18,9 @@ printf -- "#########################################\n\n"
 export SCRIPT_USERNAME='frk'
 export SCRIPT_SSH_KEY=''
 
-export VERSION_GIT=2.14.1
+export VERSION_GIT=2.14.2
 export VERSION_TMUX=2.6
-export VERSION_VIM=8.0.1142
+export VERSION_VIM=8.0.1149
 export VERSION_ZSH=5.4.2
 export VERSION_FASD=1.0.1
 export VERSION_LIBRESSL=2.6.1
