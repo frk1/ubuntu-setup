@@ -7,13 +7,13 @@ github_get_latest_tag() {
   | sed 's/[^0-9\.]//g'
 }
 
-VERSION_GIT=$(github_get_latest_tag git git)
-VERSION_TMUX=$(github_get_latest_tag tmux tmux)
-VERSION_VIM=$(github_get_latest_tag vim vim)
-VERSION_ZSH=$(github_get_latest_tag zsh-users zsh)
-VERSION_FASD=$(github_get_latest_tag clvv fasd)
-VERSION_LIBRESSL=$(github_get_latest_tag libressl-portable portable)
-VERSION_CMAKE=$(github_get_latest_tag Kitware CMake)
+export VERSION_GIT=$(github_get_latest_tag git git)
+export VERSION_TMUX=$(github_get_latest_tag tmux tmux)
+export VERSION_VIM=$(github_get_latest_tag vim vim)
+export VERSION_ZSH=$(github_get_latest_tag zsh-users zsh)
+export VERSION_FASD=$(github_get_latest_tag clvv fasd)
+export VERSION_LIBRESSL=$(github_get_latest_tag libressl-portable portable)
+export VERSION_CMAKE=$(github_get_latest_tag Kitware CMake)
 
 sed -i -r -e "s/VERSION_GIT=[0-9\\.]+/VERSION_GIT=$VERSION_GIT/g"                \
           -e "s/VERSION_TMUX=[0-9\\.]+/VERSION_TMUX=$VERSION_TMUX/g"             \
