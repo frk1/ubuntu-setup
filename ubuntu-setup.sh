@@ -25,6 +25,7 @@ export VERSION_ZSH=5.4.2
 export VERSION_FASD=1.0.1
 export VERSION_LIBRESSL=2.6.1
 export VERSION_CMAKE=3.9.3
+export VERSION_CURL=7.55.1
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
@@ -134,19 +135,31 @@ genlink() {
   echo "https://github.com/$1/$2/tarball/$3"
 }
 
-toast arm git/$VERSION_GIT:           $(genlink git git v$VERSION_GIT)
-toast arm tmux/$VERSION_TMUX:         $(genlink tmux tmux $VERSION_TMUX)                       \
+toast arm --armdir="/usr/local/libressl"                                              \
+          --noreconfigure                                                             \
+          --confappend="--disable-shared"                                             \
+          --compilecmd="./config -fPIC --disable-shared --prefix=/usr/local/libressl" \
+          libressl/$VERSION_LIBRESSL:                                                 \
+          "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$VERSION_LIBRESSL.tar.gz"
+
+toast arm --confappend="--with-ssl=/usr/local/libressl" \
+          curl/$VERSION_CURL:                           \
+          "https://curl.haxx.se/download/curl-$VERSION_CURL.tar.gz"
+
+toast arm --confappend="--without-openssl --with-curl=/usr/local" \
+          git/$VERSION_GIT:                                       \
+          https://www.kernel.org/pub/software/scm/git/git-$VERSION_GIT.tar.gz
+
+toast arm --confappend="--with-ssl-dir=/usr/local/libressl --with-ldflags=-Wl,-R/usr/local/libressl/lib" \
+          ftp://mirror.hs-esslingen.de/pub/OpenBSD/OpenSSH/portable/
+
+toast arm tmux/$VERSION_TMUX:         $(genlink tmux tmux $VERSION_TMUX)                        \
                                       --compilecmd='./autogen.sh && ./configure && make'
 toast arm vim/$VERSION_VIM:           $(genlink vim vim v$VERSION_VIM)
-toast arm zsh/$VERSION_ZSH:           $(genlink 'zsh-users' zsh "zsh-$VERSION_ZSH")            \
-                                      --compilecmd='./Util/preconfig && ./configure && make'   \
+toast arm zsh/$VERSION_ZSH:           $(genlink 'zsh-users' zsh "zsh-$VERSION_ZSH")             \
+                                      --compilecmd='./Util/preconfig && ./configure && make'    \
                                       --installcmd='make install.bin && make install.modules && make install.fns'
 toast arm fasd/$VERSION_FASD:         $(genlink clvv fasd $VERSION_FASD)
-toast arm libressl/$VERSION_LIBRESSL: $(genlink libressl-portable portable v$VERSION_LIBRESSL) \
-                                      --compilecmd='./autogen.sh && ./configure && make'
-
-eval `toast env --altarmdirs="/usr/local"`
-toast arm --confappend="--with-ssl-dir=/usr/local" ftp://mirror.hs-esslingen.de/pub/OpenBSD/OpenSSH/portable/
 
 wget https://raw.githubusercontent.com/frk1/mirrors/master/rg -O /usr/local/bin/rg
 chmod +x /usr/local/bin/rg
