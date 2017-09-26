@@ -88,6 +88,7 @@ apt-get -yqq install autoconf                  \
                     libcrypto++-dev            \
                     libcurl4-openssl-dev       \
                     libevent-dev               \
+                    libnghttp2-dev             \
                     libprotobuf-dev            \
                     libsqlite3-dev             \
                     libssl-dev                 \
@@ -142,8 +143,8 @@ toast arm --armdir="/usr/local/libressl"                                        
           libressl/$VERSION_LIBRESSL:                                                 \
           "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$VERSION_LIBRESSL.tar.gz"
 
-toast arm --confappend="--with-ssl=/usr/local/libressl" \
-          curl/$VERSION_CURL:                           \
+toast arm --confappend="--with-ssl=/usr/local/libressl --with-nghttp2" \
+          curl/$VERSION_CURL:                                          \
           "https://curl.haxx.se/download/curl-$VERSION_CURL.tar.gz"
 
 toast arm --confappend="--without-openssl --with-curl=/usr/local" \
