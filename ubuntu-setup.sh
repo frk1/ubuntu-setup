@@ -44,6 +44,7 @@ exec 1>/dev/null
 exec 2>/dev/null
 
 gpasswd -a $SCRIPT_USERNAME sudo
+gpasswd -a $SCRIPT_USERNAME www-data
 printf -- "- Updating system..." >&3
 
 cat <<'EOF' > /etc/apt/apt.conf.d/local
@@ -403,8 +404,8 @@ rm -f /etc/nginx/*.default
 mkdir -p /var/lib/nginx/body
 mkdir -p /etc/nginx/conf.d
 mkdir -p /var/www
-chown -Rh www-data:www-data /var/lib/nginx/body
-chown -Rh $SCRIPT_USERNAME:www-data /etc/nginx/conf.d
+chown -Rh www-data /var/lib/nginx/body
+chown -Rh www-data /etc/nginx/conf.d
 
 systemctl daemon-reload
 systemctl enable nginx.service
@@ -440,7 +441,7 @@ rm -f /etc/nginx/conf.d/default.conf
 
 mkdir -p /var/www/default
 mkdir -p /var/www/letsencrypt
-chown -Rh $SCRIPT_USERNAME:www-data /var/www
+chown -Rh www-data /var/www
 
 cat <<'EOF' > /etc/nginx/nginx.conf
 user www-data;
