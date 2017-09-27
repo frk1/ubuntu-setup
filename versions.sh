@@ -2,9 +2,10 @@
 set -e
 
 github_get_latest_tag() {
-  curl -sSL https://api.github.com/repos/$1/$2/tags                                                   \
-  | jq 'map(select(.name | test("^(zsh-)?v?[0-9\\.]+$", "ig"))) | map(.name) | sort | reverse | .[0]' \
-  | sed 's/[^0-9\.]//g'
+  curl -sSL https://api.github.com/repos/$1/$2/tags                                                            \
+  | jq 'map(select(.name | test("^(zsh-)?(curl-)?v?[0-9\\._]+$", "ig"))) | map(.name) | sort | reverse | .[0]' \
+  | sed 's/[^0-9\._]//g'                                                                                       \
+  | sed 's/_/\./g'
 }
 
 export VERSION_GIT=$(github_get_latest_tag git git)
@@ -14,6 +15,7 @@ export VERSION_ZSH=$(github_get_latest_tag zsh-users zsh)
 export VERSION_FASD=$(github_get_latest_tag clvv fasd)
 export VERSION_LIBRESSL=$(github_get_latest_tag libressl-portable portable)
 export VERSION_CMAKE=$(github_get_latest_tag Kitware CMake)
+export VERSION_CURL=$(github_get_latest_tag curl curl)
 
 sed -i -r -e "s/VERSION_GIT=[0-9\\.]+/VERSION_GIT=$VERSION_GIT/g"                \
           -e "s/VERSION_TMUX=[0-9\\.]+/VERSION_TMUX=$VERSION_TMUX/g"             \
@@ -22,4 +24,5 @@ sed -i -r -e "s/VERSION_GIT=[0-9\\.]+/VERSION_GIT=$VERSION_GIT/g"               
           -e "s/VERSION_FASD=[0-9\\.]+/VERSION_FASD=$VERSION_FASD/g"             \
           -e "s/VERSION_LIBRESSL=[0-9\\.]+/VERSION_LIBRESSL=$VERSION_LIBRESSL/g" \
           -e "s/VERSION_CMAKE=[0-9\\.]+/VERSION_CMAKE=$VERSION_CMAKE/g"          \
+          -e "s/VERSION_CURL=[0-9\\.]+/VERSION_CURL=$VERSION_CURL/g"             \
               ubuntu-setup.sh
