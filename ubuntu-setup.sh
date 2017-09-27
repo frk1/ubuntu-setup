@@ -297,7 +297,7 @@ cd /tmp/build-nginx
 export NGINX_VERSION=1.13.5
 export VERSION_ZLIB=zlib-1.2.11
 export VERSION_PCRE=pcre-8.41
-export VERSION_LIBRESSL=libressl-2.6.1
+export VERSION_LIBRESSL=libressl-$VERSION_LIBRESSL
 export VERSION_NGINX=nginx-$NGINX_VERSION
 
 export SOURCE_LIBRESSL=https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/
