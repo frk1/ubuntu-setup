@@ -88,6 +88,7 @@ apt-get -yqq install autoconf                  \
                     libcrypto++-dev            \
                     libcurl4-openssl-dev       \
                     libevent-dev               \
+                    libiw-dev                  \
                     libnghttp2-dev             \
                     libprotobuf-dev            \
                     libsqlite3-dev             \
@@ -108,8 +109,11 @@ apt-get -yqq install autoconf                  \
                     pax                        \
                     pkg-config                 \
                     python                     \
+                    python-dev                 \
                     python-pip                 \
                     python-software-properties \
+                    python3                    \
+                    python3-dev                \
                     python3-pip                \
                     software-properties-common \
                     sudo                       \
