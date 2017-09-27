@@ -405,8 +405,8 @@ rm -f /etc/nginx/*.default
 mkdir -p /var/lib/nginx/body
 mkdir -p /etc/nginx/conf.d
 mkdir -p /var/www
-chown -Rh www-data /var/lib/nginx/body
-chown -Rh www-data /etc/nginx/conf.d
+mkdir -p /var/www/default
+mkdir -p /var/www/letsencrypt
 
 systemctl daemon-reload
 systemctl enable nginx.service
@@ -439,10 +439,6 @@ rm -f /etc/nginx/conf.d/default.conf
             -subj "/C=NL/ST=Amsterdam/L=Amsterdam/O=Dis/CN=example.org" \
             -keyout /etc/nginx/ssl/nginx-ecc.key                        \
             -out /etc/nginx/ssl/nginx-ecc.crt
-
-mkdir -p /var/www/default
-mkdir -p /var/www/letsencrypt
-chown -Rh www-data /var/www
 
 cat <<'EOF' > /etc/nginx/nginx.conf
 user www-data;
@@ -596,5 +592,11 @@ systemctl restart php7.1-fpm
 
 printf -- "ok\n" >&3
 rm /etc/apt/apt.conf.d/local
+
+chown -R www-data /var/www
+chgrp -R www-data /var/www
+chmod -R g+w /var/www
+find /var/www -type d -exec chmod 2775 {} \;
+find /var/www -type f -exec chmod ug+rw {} \;
 
 printf -- "=> Done!\n\n" >&3
