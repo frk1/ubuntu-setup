@@ -253,10 +253,8 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@op
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
 
 AuthenticationMethods publickey
-LogLevel VERBOSE
-Subsystem sftp /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO
+LogLevel INFO
 PermitRootLogin No
-UsePrivilegeSeparation sandbox
 EOF
 
 cat <<'EOF' > /etc/ssh/ssh_config
