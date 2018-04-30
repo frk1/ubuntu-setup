@@ -537,7 +537,35 @@ http {
 }
 EOF
 
-cat <<'EOF' > /etc/nginx/conf.d/example.conf.off
+cat <<'EOF' > /etc/nginx/conf.d/example_server.conf.off
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name csgo.reactiion.net;
+
+  if ($http_user_agent ~* "WordPress") {
+    return 444;
+  }
+
+  root /var/www/reactiion.net/auth;
+
+  location / {
+    index index.php;
+    try_files $uri $uri/ =404;
+  }
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+  }
+}
+EOF
+
+cat <<'EOF' > /etc/nginx/conf.d/example_proxy_server.conf.off
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
