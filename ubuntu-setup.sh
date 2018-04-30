@@ -583,7 +583,7 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         include fastcgi.conf;
-        fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
     }
 
     location / {
@@ -600,21 +600,21 @@ EOF
 printf -- "ok\n" >&3
 printf -- "- Installing php..." >&3
 
-apt-get -yqq install php7.1          \
-                     php7.1-curl     \
-                     php7.1-fpm      \
-                     php7.1-mysql    \
-                     php7.1-dba      \
-                     php7.1-mbstring \
-                     php7.1-soap     \
-                     php7.1-xml      \
-                     php7.1-zip
+apt-get -yqq install php7.2          \
+                     php7.2-curl     \
+                     php7.2-fpm      \
+                     php7.2-mysql    \
+                     php7.2-dba      \
+                     php7.2-mbstring \
+                     php7.2-soap     \
+                     php7.2-xml      \
+                     php7.2-zip
 
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.1/fpm/php.ini
-sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.1/fpm/php.ini
-sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.1/fpm/php.ini
+sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.2/fpm/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.2/fpm/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.2/fpm/php.ini
 
-systemctl restart php7.1-fpm
+systemctl restart php7.2-fpm
 
 printf -- "ok\n" >&3
 rm /etc/apt/apt.conf.d/local
