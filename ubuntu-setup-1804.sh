@@ -18,14 +18,14 @@ printf -- "#########################################\n\n"
 export SCRIPT_USERNAME='reactiion'
 export SCRIPT_SSH_KEY=''
 
-export VERSION_GIT=2.18.0
-export VERSION_TMUX=2.6
-export VERSION_VIM=8.0.1155
-export VERSION_ZSH=5.5.1
+export VERSION_GIT=2.19.2
+export VERSION_TMUX=2.8
+export VERSION_VIM=8.1.0549
+export VERSION_ZSH=5.6.2
 export VERSION_FASD=1.0.1
-export VERSION_LIBRESSL=2.6.2
-export VERSION_CMAKE=3.12.1
-export VERSION_CURL=7.61.0
+export VERSION_LIBRESSL=2.8.2
+export VERSION_CMAKE=3.13.0
+export VERSION_CURL=7.62.0
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
@@ -166,7 +166,7 @@ toast arm fasd/$VERSION_FASD:         $(genlink clvv fasd $VERSION_FASD)
 wget https://raw.githubusercontent.com/frk1/mirrors/master/rg -O /usr/local/bin/rg
 chmod +x /usr/local/bin/rg
 
-wget https://cmake.org/files/v3.12/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
+wget https://cmake.org/files/v3.13/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
 tar --strip-components 1 -xzvf /tmp/cmake.tar.gz -C /usr/local
 curl -sSL http://git.io/git-extras-setup | bash
 
@@ -287,7 +287,7 @@ printf -- "- Building nginx..." >&3
 mkdir -p /tmp/build-nginx
 cd /tmp/build-nginx
 
-export NGINX_VERSION=1.15.3
+export NGINX_VERSION=1.15.7
 export VERSION_ZLIB=zlib-1.2.11
 export VERSION_PCRE=pcre-8.41
 export VERSION_LIBRESSL=libressl-$VERSION_LIBRESSL
