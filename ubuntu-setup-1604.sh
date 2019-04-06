@@ -167,7 +167,7 @@ toast arm fasd/$VERSION_FASD:         $(genlink clvv fasd $VERSION_FASD)
 wget https://raw.githubusercontent.com/frk1/mirrors/master/rg -O /usr/local/bin/rg
 chmod +x /usr/local/bin/rg
 
-wget https://cmake.org/files/v3.13/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
+wget https://cmake.org/files/v3.14/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
 tar --strip-components 1 -xzvf /tmp/cmake.tar.gz -C /usr/local
 curl -sSL http://git.io/git-extras-setup | bash
 
@@ -553,7 +553,7 @@ server {
   location ~ \.php$ {
     try_files $uri =404;
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+    fastcgi_pass unix:/run/php/php7.3-fpm.sock;
     fastcgi_index index.php;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     include fastcgi_params;
@@ -579,7 +579,7 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         include fastcgi.conf;
-        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
     }
 
     location / {
@@ -596,21 +596,21 @@ EOF
 printf -- "ok\n" >&3
 printf -- "- Installing php..." >&3
 
-apt-get -yqq install php7.2          \
-                     php7.2-curl     \
-                     php7.2-fpm      \
-                     php7.2-mysql    \
-                     php7.2-dba      \
-                     php7.2-mbstring \
-                     php7.2-soap     \
-                     php7.2-xml      \
-                     php7.2-zip
+apt-get -yqq install php7.3          \
+                     php7.3-curl     \
+                     php7.3-fpm      \
+                     php7.3-mysql    \
+                     php7.3-dba      \
+                     php7.3-mbstring \
+                     php7.3-soap     \
+                     php7.3-xml      \
+                     php7.3-zip
 
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.2/fpm/php.ini
-sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.2/fpm/php.ini
-sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.2/fpm/php.ini
+sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.3/fpm/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.3/fpm/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.3/fpm/php.ini
 
-systemctl restart php7.2-fpm
+systemctl restart php7.3-fpm
 
 printf -- "ok\n" >&3
 
