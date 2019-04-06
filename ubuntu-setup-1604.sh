@@ -18,14 +18,14 @@ printf -- "#########################################\n\n"
 export SCRIPT_USERNAME='reactiion'
 export SCRIPT_SSH_KEY=''
 
-export VERSION_GIT=2.19.2
+export VERSION_GIT=2.21.0
 export VERSION_TMUX=2.8
-export VERSION_VIM=8.1.0549
+export VERSION_VIM=8.1.1124
 export VERSION_ZSH=5.6.2
 export VERSION_FASD=1.0.1
-export VERSION_LIBRESSL=2.2.2
-export VERSION_CMAKE=3.13.0
-export VERSION_CURL=7.62.0
+export VERSION_LIBRESSL=2.8.2
+export VERSION_CMAKE=3.14.1
+export VERSION_CURL=7.64.1
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
@@ -288,7 +288,7 @@ printf -- "- Building nginx..." >&3
 mkdir -p /tmp/build-nginx
 cd /tmp/build-nginx
 
-export NGINX_VERSION=1.15.7
+export NGINX_VERSION=1.15.10
 export VERSION_ZLIB=zlib-1.2.11
 export VERSION_PCRE=pcre-8.41
 export VERSION_LIBRESSL=libressl-$VERSION_LIBRESSL
