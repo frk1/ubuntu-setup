@@ -18,14 +18,14 @@ printf -- "#########################################\n\n"
 export SCRIPT_USERNAME='reactiion'
 export SCRIPT_SSH_KEY=''
 
-export VERSION_GIT=2.21.0
-export VERSION_TMUX=2.8
-export VERSION_VIM=8.1.1124
+export VERSION_GIT=2.23.0
+export VERSION_TMUX=2.9
+export VERSION_VIM=8.1.1973
 export VERSION_ZSH=5.6.2
 export VERSION_FASD=1.0.1
 export VERSION_LIBRESSL=2.8.2
-export VERSION_CMAKE=3.14.1
-export VERSION_CURL=7.64.1
+export VERSION_CMAKE=3.15.2
+export VERSION_CURL=7.65.3
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
@@ -167,7 +167,7 @@ toast arm fasd/$VERSION_FASD:         $(genlink clvv fasd $VERSION_FASD)
 wget https://raw.githubusercontent.com/frk1/mirrors/master/rg -O /usr/local/bin/rg
 chmod +x /usr/local/bin/rg
 
-wget https://cmake.org/files/v3.14/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
+wget https://cmake.org/files/v3.15/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
 tar --strip-components 1 -xzvf /tmp/cmake.tar.gz -C /usr/local
 curl -sSL http://git.io/git-extras-setup | bash
 
@@ -213,26 +213,6 @@ runuser -l $SCRIPT_USERNAME -c 'zsh -s' <<'EOF'
     touch ${user_file}
     ( print -rn "$(<${template_file})$(<${user_file})" >! ${user_file} ) 2>/dev/null
   done
-
-  wget -O /tmp/n-install.sh https://git.io/n-install
-  wget -O /tmp/rust-install.sh https://sh.rustup.rs
-  chmod +x /tmp/{n,rust}-install.sh
-
-  /tmp/n-install.sh -n -y -q latest
-  /tmp/rust-install.sh -y --no-modify-path
-
-  rm /tmp/{n,rust}-install.sh
-
-  rehash
-  npm i -g npm@latest
-  npm i -g coffee-script@latest pm2@latest
-  pm2 install coffeescript
-  pm2 kill
-
-  rustup target add x86_64-unknown-linux-musl
-  rustup toolchain add nightly
-  rustup default nightly
-  cargo install --force --git https://github.com/ogham/exa.git
 EOF
 
 chown -Rh $SCRIPT_USERNAME /home/$SCRIPT_USERNAME
@@ -288,9 +268,9 @@ printf -- "- Building nginx..." >&3
 mkdir -p /tmp/build-nginx
 cd /tmp/build-nginx
 
-export NGINX_VERSION=1.15.10
+export NGINX_VERSION=1.17.3
 export VERSION_ZLIB=zlib-1.2.11
-export VERSION_PCRE=pcre-8.41
+export VERSION_PCRE=pcre-8.43
 export VERSION_LIBRESSL=libressl-$VERSION_LIBRESSL
 export VERSION_NGINX=nginx-$NGINX_VERSION
 
@@ -623,9 +603,12 @@ find /var/www -type d -exec chmod 2775 {} \;
 find /var/www -type f -exec chmod ug+rw {} \;
 
 printf -- "- Installing pip, pip3, and python tools..." >&3
-pip install --upgrade pip setuptools
-pip3 install --upgrade pip setuptools
-pip3 install --upgrade asciinema httpie glances python-swiftclient python-keystoneclient
+pip2 install --upgrade setuptools pip
+pip3 install --upgrade setuptools pip
+
+hash -r pip pip2 pip3
+apt-get remove -yqq python-pip python3-pip
+pip install --upgrade asciinema httpie python-swiftclient python-keystoneclient magic-wormhole
 printf -- "ok\n" >&3
 
 printf -- "=> Done!\n\n" >&3
