@@ -19,13 +19,13 @@ export SCRIPT_USERNAME='reactiion'
 export SCRIPT_SSH_KEY=''
 
 export VERSION_GIT=2.23.0
-export VERSION_TMUX=2.9
-export VERSION_VIM=8.1.1973
-export VERSION_ZSH=5.6.2
+export VERSION_TMUX=3.0
+export VERSION_VIM=8.1.2234
+export VERSION_ZSH=5.7.1
 export VERSION_FASD=1.0.1
-export VERSION_LIBRESSL=2.8.2
-export VERSION_CMAKE=3.15.2
-export VERSION_CURL=7.65.3
+export VERSION_LIBRESSL=3.0.2
+export VERSION_CMAKE=3.15.5
+export VERSION_CURL=7.66.0
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
