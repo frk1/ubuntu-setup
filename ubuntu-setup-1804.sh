@@ -601,6 +601,24 @@ chmod -R g+w /var/www
 find /var/www -type d -exec chmod 2775 {} \;
 find /var/www -type f -exec chmod ug+rw {} \;
 
+printf -- "- Installing docker and docker-compose"
+# remove previous installed docker engine and install the latest
+apt remove -y docker docker-engine docker.io
+apt install -y docker.io
+
+# enable docker service
+systemctl start docker
+systemctl enable docker
+
+# install docker compose
+curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# fix permissions "docker: Got permission denied while trying to connect to the Docker daemon socket at ...: connect: permission denied"
+usermod -a -G docker $SCRIPT_USERNAME
+
+printf -- "ok\n" >&3
+
 printf -- "- Installing pip, pip3, and python tools..." >&3
 pip2 install --upgrade setuptools pip
 pip3 install --upgrade setuptools pip
