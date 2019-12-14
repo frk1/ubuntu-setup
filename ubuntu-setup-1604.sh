@@ -15,17 +15,17 @@ printf -- "#########################################\n\n"
 # directly (not recommend), use 'sudo -i' to become root when needed.             #
 ###################################################################################
 
-export SCRIPT_USERNAME='frk'
+export SCRIPT_USERNAME='reactiion'
 export SCRIPT_SSH_KEY=''
 
-export VERSION_GIT=2.14.2
-export VERSION_TMUX=2.6
-export VERSION_VIM=8.0.1155
-export VERSION_ZSH=5.4.2
+export VERSION_GIT=2.23.0
+export VERSION_TMUX=3.0
+export VERSION_VIM=8.1.2234
+export VERSION_ZSH=5.7.1
 export VERSION_FASD=1.0.1
-export VERSION_LIBRESSL=2.6.2
-export VERSION_CMAKE=3.9.3
-export VERSION_CURL=7.55.1
+export VERSION_LIBRESSL=3.0.2
+export VERSION_CMAKE=3.15.5
+export VERSION_CURL=7.66.0
 
 printf -- "- Adding user '$SCRIPT_USERNAME'...\n\n"
 adduser --quiet --gecos "" $SCRIPT_USERNAME
@@ -40,8 +40,8 @@ printf -- "- Adding user '$SCRIPT_USERNAME'...ok\n"
 
 exec 3>&1
 exec 4>&2
-exec 1>/dev/null
-exec 2>/dev/null
+#exec 1>/dev/null
+#exec 2>/dev/null
 
 gpasswd -a $SCRIPT_USERNAME sudo
 gpasswd -a $SCRIPT_USERNAME www-data
@@ -55,8 +55,8 @@ Dpkg::Options {
 EOF
 
 export DEBIAN_FRONTEND=noninteractive
-apt-get -yqq update
-apt-get -yqq install software-properties-common language-pack-en-base
+apt-get -y update
+apt-get -y install software-properties-common language-pack-en-base
 
 timedatectl set-timezone Europe/Berlin
 export LC_ALL='en_US.UTF-8'
@@ -66,70 +66,66 @@ update-locale LC_ALL="en_GB.UTF-8" LANG="en_GB.UTF-8"
 add-apt-repository -y ppa:jonathonf/gcc
 add-apt-repository -y ppa:ondrej/php
 
-apt-get -yqq update
-apt-get -yqq upgrade
-apt-get -yqq dist-upgrade
-apt-get -yqq autoremove
-apt-get -yqq install autoconf                   \
-                     automake                   \
-                     build-essential            \
-                     checkinstall               \
-                     clang                      \
-                     curl                       \
-                     dbus                       \
-                     g++                        \
-                     g++-7                      \
-                     gcc                        \
-                     gcc-7                      \
-                     gettext                    \
-                     git                        \
-                     htop                       \
-                     iftop                      \
-                     jq                         \
-                     landscape-common           \
-                     libcrypto++-dev            \
-                     libcurl4-openssl-dev       \
-                     libevent-dev               \
-                     libiw-dev                  \
-                     libnghttp2-dev             \
-                     libprotobuf-dev            \
-                     libsqlite3-dev             \
-                     libssl-dev                 \
-                     libtool                    \
-                     libz-dev                   \
-                     libgd-dev                  \
-                     libgeoip-dev               \
-                     m4                         \
-                     man                        \
-                     mosh                       \
-                     musl-tools                 \
-                     ncurses-dev                \
-                     ncurses-term               \
-                     netcat                     \
-                     ntp                        \
-                     ufw                        \
-                     pax                        \
-                     pkg-config                 \
-                     python                     \
-                     python-dev                 \
-                     python-pip                 \
-                     python-software-properties \
-                     python3                    \
-                     python3-dev                \
-                     python3-pip                \
-                     software-properties-common \
-                     sudo                       \
-                     tree                       \
-                     vim                        \
-                     wget                       \
-                     zsh
+apt-get -y update
+apt-get -y upgrade
+apt-get -y dist-upgrade
+apt-get -y autoremove
+apt-get -y install autoconf                   \
+                   automake                   \
+                   build-essential            \
+                   checkinstall               \
+                   clang                      \
+                   curl                       \
+                   dbus                       \
+                   g++                        \
+                   g++-7                      \
+                   gcc                        \
+                   gcc-7                      \
+                   gettext                    \
+                   git                        \
+                   htop                       \
+                   iftop                      \
+                   jq                         \
+                   landscape-common           \
+                   libcrypto++-dev            \
+                   libcurl4-openssl-dev       \
+                   libevent-dev               \
+                   libiw-dev                  \
+                   libnghttp2-dev             \
+                   libprotobuf-dev            \
+                   libsqlite3-dev             \
+                   libssl-dev                 \
+                   libtool                    \
+                   libz-dev                   \
+                   libgd-dev                  \
+                   libgeoip-dev               \
+                   m4                         \
+                   man                        \
+                   mosh                       \
+                   musl-tools                 \
+                   ncurses-dev                \
+                   ncurses-term               \
+                   netcat                     \
+                   ntp                        \
+                   ufw                        \
+                   pax                        \
+                   pkg-config                 \
+                   python                     \
+                   python-dev                 \
+                   python-pip                 \
+                   python-software-properties \
+                   python3                    \
+                   python3-dev                \
+                   python3-pip                \
+                   software-properties-common \
+                   sudo                       \
+                   tree                       \
+                   vim                        \
+                   wget                       \
+                   zsh
 
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100 \
                     --slave   /usr/bin/g++ g++ /usr/bin/g++-7
-
-pip install --upgrade pip setuptools
-pip3 install --upgrade pip setuptools
-pip3 install --upgrade asciinema httpie glances python-swiftclient python-keystoneclient
 
 printf -- "ok\n" >&3
 printf -- "- Building essentials using toast..." >&3
@@ -171,7 +167,7 @@ toast arm fasd/$VERSION_FASD:         $(genlink clvv fasd $VERSION_FASD)
 wget https://raw.githubusercontent.com/frk1/mirrors/master/rg -O /usr/local/bin/rg
 chmod +x /usr/local/bin/rg
 
-wget https://cmake.org/files/v3.9/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
+wget https://cmake.org/files/v3.15/cmake-$VERSION_CMAKE-Linux-x86_64.tar.gz  -O /tmp/cmake.tar.gz
 tar --strip-components 1 -xzvf /tmp/cmake.tar.gz -C /usr/local
 curl -sSL http://git.io/git-extras-setup | bash
 
@@ -217,26 +213,6 @@ runuser -l $SCRIPT_USERNAME -c 'zsh -s' <<'EOF'
     touch ${user_file}
     ( print -rn "$(<${template_file})$(<${user_file})" >! ${user_file} ) 2>/dev/null
   done
-
-  wget -O /tmp/n-install.sh https://git.io/n-install
-  wget -O /tmp/rust-install.sh https://sh.rustup.rs
-  chmod +x /tmp/{n,rust}-install.sh
-
-  /tmp/n-install.sh -n -y -q latest
-  /tmp/rust-install.sh -y --no-modify-path
-
-  rm /tmp/{n,rust}-install.sh
-
-  rehash
-  npm i -g npm@latest
-  npm i -g coffee-script@latest pm2@latest
-  pm2 install coffeescript
-  pm2 kill
-
-  rustup target add x86_64-unknown-linux-musl
-  rustup toolchain add nightly
-  rustup default nightly
-  cargo install --force --git https://github.com/ogham/exa.git
 EOF
 
 chown -Rh $SCRIPT_USERNAME /home/$SCRIPT_USERNAME
@@ -292,9 +268,9 @@ printf -- "- Building nginx..." >&3
 mkdir -p /tmp/build-nginx
 cd /tmp/build-nginx
 
-export NGINX_VERSION=1.13.5
+export NGINX_VERSION=1.17.3
 export VERSION_ZLIB=zlib-1.2.11
-export VERSION_PCRE=pcre-8.41
+export VERSION_PCRE=pcre-8.43
 export VERSION_LIBRESSL=libressl-$VERSION_LIBRESSL
 export VERSION_NGINX=nginx-$NGINX_VERSION
 
@@ -537,7 +513,35 @@ http {
 }
 EOF
 
-cat <<'EOF' > /etc/nginx/conf.d/example.conf.off
+cat <<'EOF' > /etc/nginx/conf.d/example_server.conf.off
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name csgo.reactiion.net;
+
+  if ($http_user_agent ~* "WordPress") {
+    return 444;
+  }
+
+  root /var/www/reactiion.net/auth;
+
+  location / {
+    index index.php;
+    try_files $uri $uri/ =404;
+  }
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+  }
+}
+EOF
+
+cat <<'EOF' > /etc/nginx/conf.d/example_proxy_server.conf.off
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
@@ -555,7 +559,7 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         include fastcgi.conf;
-        fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
     }
 
     location / {
@@ -572,23 +576,24 @@ EOF
 printf -- "ok\n" >&3
 printf -- "- Installing php..." >&3
 
-apt-get -yqq install php7.1          \
-                     php7.1-curl     \
-                     php7.1-fpm      \
-                     php7.1-mysql    \
-                     php7.1-dba      \
-                     php7.1-mbstring \
-                     php7.1-soap     \
-                     php7.1-xml      \
-                     php7.1-zip
+apt-get -yqq install php7.3          \
+                     php7.3-curl     \
+                     php7.3-fpm      \
+                     php7.3-mysql    \
+                     php7.3-dba      \
+                     php7.3-mbstring \
+                     php7.3-soap     \
+                     php7.3-xml      \
+                     php7.3-zip
 
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.1/fpm/php.ini
-sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.1/fpm/php.ini
-sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.1/fpm/php.ini
+sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.3/fpm/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 32M/g" /etc/php/7.3/fpm/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 100M/g" /etc/php/7.3/fpm/php.ini
 
-systemctl restart php7.1-fpm
+systemctl restart php7.3-fpm
 
 printf -- "ok\n" >&3
+
 rm /etc/apt/apt.conf.d/local
 
 chown -R www-data /var/www
@@ -596,5 +601,32 @@ chgrp -R www-data /var/www
 chmod -R g+w /var/www
 find /var/www -type d -exec chmod 2775 {} \;
 find /var/www -type f -exec chmod ug+rw {} \;
+
+printf -- "- Installing docker and docker-compose"
+# remove previous installed docker engine and install the latest
+apt remove -y docker docker-engine docker.io
+apt install -y docker.io
+
+# enable docker service
+systemctl start docker
+systemctl enable docker
+
+# install docker compose
+curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+# fix permissions "docker: Got permission denied while trying to connect to the Docker daemon socket at ...: connect: permission denied"
+usermod -a -G docker $SCRIPT_USERNAME
+
+printf -- "ok\n" >&3
+
+printf -- "- Installing pip, pip3, and python tools..." >&3
+pip2 install --upgrade setuptools pip
+pip3 install --upgrade setuptools pip
+
+hash -r pip pip2 pip3
+apt-get remove -yqq python-pip python3-pip
+pip install --upgrade asciinema httpie python-swiftclient python-keystoneclient magic-wormhole
+printf -- "ok\n" >&3
 
 printf -- "=> Done!\n\n" >&3
